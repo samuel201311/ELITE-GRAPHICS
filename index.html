@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELITE GRAPHICS — Visual Identity Architects</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808; --gold: #C9A84C; --gold-light: #F0D080;
+    --gold-dark: #8A6A20; --white: #F4F0E8; --gray: #1A1A1A;
+    --gray-mid: #2E2E2E; --text-muted: #888;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; cursor: none; }
+
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  .cursor { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s; mix-blend-mode: difference; }
+  .cursor-ring { width: 38px; height: 38px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0.6; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9000; opacity: 0.4; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 1.6rem 4rem; background: linear-gradient(to bottom, rgba(8,8,8,0.97), transparent); backdrop-filter: blur(2px); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.2em; color: var(--gold); text-decoration: none; cursor: pointer; }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.3s; cursor: pointer; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.75rem 1.8rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; transition: all 0.3s; position: relative; overflow: hidden; cursor: pointer; }
+  .nav-cta::before { content: ''; position: absolute; inset: 0; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; z-index: -1; }
+  .nav-cta:hover { color: var(--black); }
+  .nav-cta:hover::before { transform: scaleX(1); }
+
+  /* ====== HOME ====== */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; padding: 8rem 4rem 4rem; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 20% 80%, rgba(201,168,76,0.05) 0%, transparent 50%), var(--black); }
+  .hero-bg-lines { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .hero-bg-lines::before { content: ''; position: absolute; top: -20%; right: -10%; width: 700px; height: 700px; border: 1px solid rgba(201,168,76,0.08); border-radius: 50%; animation: rotate 40s linear infinite; }
+  .hero-bg-lines::after { content: ''; position: absolute; top: -30%; right: -20%; width: 900px; height: 900px; border: 1px solid rgba(201,168,76,0.05); border-radius: 50%; animation: rotate 60s linear infinite reverse; }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-eyebrow::before { content: ''; display: inline-block; width: 40px; height: 1px; background: var(--gold); vertical-align: middle; margin-right: 1rem; margin-top: -2px; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 14vw, 14rem); line-height: 0.88; letter-spacing: 0.02em; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-title .line-gold { color: var(--gold); display: block; }
+  .hero-title .line-outline { -webkit-text-stroke: 1px rgba(244,240,232,0.3); color: transparent; display: block; }
+  .hero-desc { font-size: 1.25rem; font-weight: 300; font-style: italic; color: rgba(244,240,232,0.6); max-width: 480px; line-height: 1.7; margin-top: 2.5rem; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-actions { display: flex; align-items: center; gap: 2.5rem; margin-top: 3.5rem; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 1rem; background: var(--gold); color: var(--black); padding: 1.1rem 2.8rem; font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; font-weight: 700; transition: all 0.3s; position: relative; overflow: hidden; cursor: pointer; border: none; }
+  .btn-primary::before { content: ''; position: absolute; inset: 0; background: var(--gold-light); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; z-index: 0; }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary:hover::before { transform: scaleX(1); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.3); }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--text-muted); font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; cursor: pointer; background: none; border: none; }
+  .btn-ghost .arrow { width: 32px; height: 1px; background: var(--text-muted); transition: width 0.3s, background 0.3s; position: relative; }
+  .btn-ghost .arrow::after { content: ''; position: absolute; right: 0; top: -3px; border: 4px solid transparent; border-left: 6px solid var(--text-muted); transition: border-color 0.3s; }
+  .btn-ghost:hover { color: var(--gold); }
+  .btn-ghost:hover .arrow { width: 48px; background: var(--gold); }
+  .btn-ghost:hover .arrow::after { border-left-color: var(--gold); }
+  .hero-stats { position: absolute; bottom: 4rem; right: 4rem; z-index: 1; display: flex; gap: 4rem; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+  .stat-item { text-align: right; }
+  .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1; color: var(--gold); }
+  .stat-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.3rem; }
+
+  .marquee-section { padding: 1.5rem 0; background: var(--gold); overflow: hidden; }
+  .marquee-track { display: flex; animation: marquee 20s linear infinite; width: max-content; }
+  .marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.25em; color: var(--black); white-space: nowrap; padding: 0 2rem; display: flex; align-items: center; gap: 2rem; }
+  .marquee-dot { width: 6px; height: 6px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  .services { padding: 9rem 4rem; }
+  .section-header { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: end; margin-bottom: 5rem; }
+  .section-tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  .section-tag::before { content: '//'; margin-right: 0.5rem; opacity: 0.5; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 6rem); line-height: 0.92; }
+  .section-desc { font-size: 1.05rem; font-weight: 300; color: rgba(244,240,232,0.55); line-height: 1.8; max-width: 400px; align-self: end; }
+
+  .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; background: var(--gray-mid); }
+  .service-card { background: var(--black); padding: 3rem 2.5rem; position: relative; overflow: hidden; transition: background 0.4s; }
+  .service-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold-dark), var(--gold), var(--gold-dark)); transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease; }
+  .service-card:hover { background: var(--gray); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-number { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: rgba(201,168,76,0.06); line-height: 1; position: absolute; top: 1.5rem; right: 2rem; transition: color 0.4s; user-select: none; }
+  .service-card:hover .service-number { color: rgba(201,168,76,0.12); }
+  .service-icon { width: 52px; height: 52px; border: 1px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; transition: border-color 0.3s, background 0.3s; }
+  .service-card:hover .service-icon { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .service-icon svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.05em; margin-bottom: 0.8rem; }
+  .service-desc { font-size: 0.95rem; font-weight: 300; color: rgba(244,240,232,0.5); line-height: 1.7; margin-bottom: 2rem; }
+  .service-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .service-features li { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); display: flex; align-items: center; gap: 0.7rem; text-transform: uppercase; }
+  .service-features li::before { content: ''; width: 16px; height: 1px; background: var(--gold-dark); flex-shrink: 0; }
+
+  .process { padding: 9rem 4rem; background: var(--gray); position: relative; overflow: hidden; }
+  .process::before { content: 'PROCESS'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Bebas Neue', sans-serif; font-size: 20vw; color: rgba(201,168,76,0.025); white-space: nowrap; pointer-events: none; user-select: none; }
+  .process-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-top: 5rem; position: relative; }
+  .process-steps::before { content: ''; position: absolute; top: 2.5rem; left: 12.5%; right: 12.5%; height: 1px; background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), rgba(201,168,76,0.3), transparent); z-index: 0; }
+  .process-step { padding: 0 2rem; position: relative; z-index: 1; text-align: center; }
+  .step-number-wrap { width: 5rem; height: 5rem; border: 1px solid rgba(201,168,76,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; background: var(--gray); transition: all 0.3s; position: relative; }
+  .step-number-wrap::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.1); }
+  .process-step:hover .step-number-wrap { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+  .step-number { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--gold); }
+  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.08em; margin-bottom: 0.8rem; }
+  .step-desc { font-size: 0.9rem; font-weight: 300; color: rgba(244,240,232,0.45); line-height: 1.7; }
+
+  .why { padding: 9rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; }
+  .why-visual { position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+  .why-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(201,168,76,0.15); }
+  .ring-1 { width: 100%; height: 100%; animation: pulse 4s ease-in-out infinite; }
+  .ring-2 { width: 78%; height: 78%; animation: pulse 4s ease-in-out 0.5s infinite; }
+  .ring-3 { width: 56%; height: 56%; animation: pulse 4s ease-in-out 1s infinite; }
+  @keyframes pulse { 0%,100% { border-color: rgba(201,168,76,0.1); transform: scale(1); } 50% { border-color: rgba(201,168,76,0.25); transform: scale(1.01); } }
+  .why-center-box { width: 38%; aspect-ratio: 1; background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; z-index: 1; }
+  .why-center-text { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--gold); line-height: 1; }
+  .why-center-label { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); text-align: center; }
+  .why-orbits { position: absolute; inset: 0; animation: rotateSlow 25s linear infinite; }
+  .why-orbit-dot { position: absolute; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+  .dot-top { top: -4px; left: calc(50% - 4px); }
+  .dot-right { right: -4px; top: calc(50% - 4px); }
+  @keyframes rotateSlow { to { transform: rotate(360deg); } }
+  .why-points { display: flex; flex-direction: column; gap: 2rem; }
+  .why-point { display: flex; gap: 1.5rem; align-items: flex-start; padding: 1.5rem; border: 1px solid rgba(201,168,76,0); transition: all 0.3s; }
+  .why-point:hover { border-color: rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
+  .point-icon { width: 44px; height: 44px; flex-shrink: 0; border: 1px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; }
+  .point-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .point-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+  .point-desc { font-size: 0.92rem; font-weight: 300; color: rgba(244,240,232,0.5); line-height: 1.7; }
+
+  .portfolio { padding: 5rem 4rem 9rem; background: var(--gray); }
+  .portfolio-grid { display: grid; grid-template-columns: repeat(6,1fr); grid-template-rows: repeat(2,220px); gap: 8px; margin-top: 4rem; }
+  .portfolio-item { position: relative; overflow: hidden; cursor: pointer; }
+  .portfolio-item:nth-child(1) { grid-column: 1/3; grid-row: 1; }
+  .portfolio-item:nth-child(2) { grid-column: 3/4; grid-row: 1; }
+  .portfolio-item:nth-child(3) { grid-column: 4/7; grid-row: 1; }
+  .portfolio-item:nth-child(4) { grid-column: 1/2; grid-row: 2; }
+  .portfolio-item:nth-child(5) { grid-column: 2/5; grid-row: 2; }
+  .portfolio-item:nth-child(6) { grid-column: 5/7; grid-row: 2; }
+  .portfolio-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.15em; transition: transform 0.5s ease; }
+  .portfolio-item:hover .portfolio-bg { transform: scale(1.05); }
+  .pb-1 { background: linear-gradient(135deg,#1a1200,#3d2c00,#1a1200); color: rgba(201,168,76,0.4); }
+  .pb-2 { background: linear-gradient(135deg,#0d0d0d,#1f1a10,#0d0d0d); color: rgba(201,168,76,0.3); }
+  .pb-3 { background: linear-gradient(135deg,#100e07,#2a2010,#100e07); color: rgba(201,168,76,0.35); }
+  .pb-4 { background: linear-gradient(135deg,#0d0d0d,#18130a,#0d0d0d); color: rgba(201,168,76,0.25); }
+  .pb-5 { background: linear-gradient(135deg,#191400,#382800,#191400); color: rgba(201,168,76,0.4); }
+  .pb-6 { background: linear-gradient(135deg,#0f0f0f,#231b0c,#0f0f0f); color: rgba(201,168,76,0.3); }
+  .portfolio-overlay { position: absolute; inset: 0; background: rgba(8,8,8,0.78); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; opacity: 0; transition: opacity 0.3s; }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--white); }
+  .portfolio-overlay-tag { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+  .portfolio-view-btn { margin-top: 0.4rem; padding: 0.55rem 1.4rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; background: var(--gold); color: var(--black); border: none; cursor: pointer; font-weight: 700; transition: background 0.2s; }
+  .portfolio-view-btn:hover { background: var(--gold-light); }
+
+  .pricing { padding: 9rem 4rem; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--gray-mid); margin-top: 5rem; }
+  .pricing-card { background: var(--black); padding: 3.5rem 3rem; position: relative; }
+  .pricing-card.featured { background: rgba(201,168,76,0.04); border-top: 2px solid var(--gold); }
+  .pricing-card.featured::before { content: 'MOST POPULAR'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.25em; padding: 0.35rem 1.2rem; background: var(--gold); color: var(--black); font-weight: 700; }
+  .pricing-tier { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .pricing-price { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 1; color: var(--white); margin-bottom: 0.5rem; }
+  .pricing-price span { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--text-muted); vertical-align: super; }
+  .pricing-period { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 2rem; }
+  .pricing-divider { height: 1px; background: rgba(201,168,76,0.15); margin-bottom: 2rem; }
+  .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 3rem; }
+  .pricing-features li { font-size: 0.92rem; font-weight: 300; color: rgba(244,240,232,0.6); display: flex; align-items: center; gap: 0.8rem; }
+  .pricing-features li.yes::before { content: '✦'; color: var(--gold); font-size: 0.7rem; flex-shrink: 0; }
+  .pricing-features li.no { color: rgba(244,240,232,0.25); text-decoration: line-through; text-decoration-color: rgba(244,240,232,0.15); }
+  .pricing-features li.no::before { content: '·'; color: var(--gray-mid); flex-shrink: 0; }
+  .btn-pricing { display: block; width: 100%; text-align: center; padding: 1rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; transition: all 0.3s; cursor: pointer; border: none; text-decoration: none; }
+  .btn-pricing-outline { border: 1px solid rgba(201,168,76,0.3); color: var(--text-muted); background: transparent; }
+  .btn-pricing-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-pricing-gold { background: var(--gold); color: var(--black); font-weight: 700; }
+  .btn-pricing-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .testimonials { padding: 9rem 4rem; background: var(--gray); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; background: rgba(201,168,76,0.1); margin-top: 5rem; }
+  .testimonial-card { background: var(--gray); padding: 2.5rem; transition: background 0.3s; }
+  .testimonial-card:hover { background: #222; }
+  .testimonial-quote { font-size: 0.9rem; font-weight: 300; font-style: italic; color: rgba(244,240,232,0.65); line-height: 1.9; margin-bottom: 1.5rem; }
+  .testimonial-quote::before { content: '\201C'; color: var(--gold); font-size: 2rem; line-height: 0; vertical-align: -0.4em; margin-right: 0.2em; }
+  .testimonial-author { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; }
+  .testimonial-role { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 0.3rem; }
+  .stars { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.2em; margin-bottom: 1rem; }
+
+  .cta-section { padding: 10rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%); pointer-events: none; }
+  .cta-tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem,8vw,8rem); line-height: 0.9; margin-bottom: 2rem; }
+  .cta-sub { font-size: 1.1rem; font-weight: 300; font-style: italic; color: rgba(244,240,232,0.5); margin-bottom: 3.5rem; max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .btn-large { padding: 1.3rem 3.5rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; font-weight: 700; transition: all 0.3s; cursor: pointer; }
+  .btn-large-gold { background: var(--gold); color: var(--black); border: none; }
+  .btn-large-gold:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 16px 50px rgba(201,168,76,0.3); }
+  .btn-large-outline { border: 1px solid rgba(201,168,76,0.4); color: var(--gold); background: transparent; }
+  .btn-large-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
+  footer { background: var(--gray); padding: 4rem 4rem 2rem; border-top: 1px solid rgba(201,168,76,0.1); }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .footer-tagline { font-size: 0.9rem; font-weight: 300; font-style: italic; color: rgba(244,240,232,0.4); line-height: 1.7; margin-bottom: 2rem; }
+  .footer-social { display: flex; gap: 1rem; }
+  .social-btn { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.25); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.75rem; text-decoration: none; transition: all 0.3s; font-family: 'Space Mono', monospace; }
+  .social-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+  .footer-col-title { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-links a { font-size: 0.88rem; font-weight: 300; color: rgba(244,240,232,0.45); text-decoration: none; transition: color 0.3s; cursor: pointer; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { padding-top: 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: rgba(244,240,232,0.25); }
+  .footer-copy span { color: var(--gold); }
+
+  /* ====== PROJECT PAGE ====== */
+  .project-hero { min-height: 52vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; }
+  .project-hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(201,168,76,0.1) 0%, transparent 65%), var(--black); }
+  .project-hero-lines { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .project-hero-lines::before { content: ''; position: absolute; top: -30%; right: -10%; width: 600px; height: 600px; border: 1px solid rgba(201,168,76,0.07); border-radius: 50%; animation: rotate 35s linear infinite; }
+  .project-hero-lines::after { content: ''; position: absolute; bottom: -20%; left: -15%; width: 500px; height: 500px; border: 1px solid rgba(201,168,76,0.04); border-radius: 50%; animation: rotate 50s linear infinite reverse; }
+
+  /* GOLD BACK BUTTON */
+  .btn-back { display: inline-flex; align-items: center; gap: 0.9rem; background: var(--gold); color: var(--black); border: none; padding: 0.9rem 2.2rem; font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; z-index: 2; margin-bottom: 2.8rem; }
+  .btn-back::before { content: ''; position: absolute; inset: 0; background: var(--gold-light); transform: scaleX(0); transform-origin: right; transition: transform 0.3s; z-index: 0; }
+  .btn-back-icon { display: flex; align-items: center; gap: 0; position: relative; z-index: 1; }
+  .btn-back-icon .arr { width: 22px; height: 1px; background: var(--black); position: relative; transition: width 0.3s; }
+  .btn-back-icon .arr::before { content: ''; position: absolute; left: 0; top: -3px; border: 4px solid transparent; border-right: 6px solid var(--black); }
+  .btn-back span { position: relative; z-index: 1; }
+  .btn-back:hover::before { transform: scaleX(1); }
+  .btn-back:hover { box-shadow: 0 10px 35px rgba(201,168,76,0.4); transform: translateY(-2px); }
+  .btn-back:hover .arr { width: 30px; }
+
+  .proj-tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; position: relative; z-index: 2; }
+  .proj-tag::before { content: '//'; margin-right: 0.5rem; opacity: 0.5; }
+  .proj-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 10vw, 9rem); line-height: 0.88; position: relative; z-index: 2; }
+  .proj-title .gold { color: var(--gold); }
+  .proj-desc { font-size: 1.1rem; font-weight: 300; font-style: italic; color: rgba(244,240,232,0.55); max-width: 520px; line-height: 1.7; margin-top: 1.5rem; position: relative; z-index: 2; }
+
+  .gallery-section { padding: 5rem 4rem 8rem; }
+  .gallery-hint { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem; }
+  .gallery-hint::before { content: ''; width: 32px; height: 1px; background: var(--gold-dark); flex-shrink: 0; }
+
+  /* GALLERY GRID — masonry-like, auto columns */
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+
+  .upload-slot { position: relative; background: var(--gray); border: 1px dashed rgba(201,168,76,0.2); overflow: hidden; cursor: pointer; transition: border-color 0.3s, background 0.3s; min-height: 220px; display: flex; align-items: stretch; }
+  .upload-slot:hover { border-color: rgba(201,168,76,0.5); background: #1e1e1e; }
+  .upload-slot.filled { border-style: solid; border-color: rgba(201,168,76,0.12); min-height: unset; }
+  .upload-slot.filled:hover { border-color: rgba(201,168,76,0.4); }
+
+  .slot-img-wrap { width: 100%; position: relative; }
+  .slot-img-wrap img { width: 100%; height: auto; display: block; }
+
+  .slot-empty { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.9rem; padding: 2.5rem 1.5rem; text-align: center; }
+  .slot-empty svg { width: 34px; height: 34px; stroke: rgba(201,168,76,0.35); fill: none; stroke-width: 1.3; }
+  .slot-empty-text { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(201,168,76,0.35); line-height: 1.7; }
+  .slot-num { position: absolute; top: 8px; left: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: rgba(201,168,76,0.15); z-index: 3; pointer-events: none; transition: color 0.3s; }
+  .upload-slot:hover .slot-num { color: rgba(201,168,76,0.4); }
+  .upload-slot.filled .slot-num { color: rgba(201,168,76,0.06); }
+
+  .slot-hover-overlay { position: absolute; inset: 0; background: rgba(8,8,8,0.72); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; opacity: 0; transition: opacity 0.3s; z-index: 4; pointer-events: none; }
+  .upload-slot.filled:hover .slot-hover-overlay { opacity: 1; pointer-events: all; }
+  .overlay-view { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+  .overlay-remove { padding: 0.4rem 1.1rem; background: transparent; border: 1px solid rgba(255,80,80,0.4); color: rgba(255,120,120,0.7); font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+  .overlay-remove:hover { border-color: #f55; color: #f55; }
+  .slot-file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
+  .upload-slot.filled .slot-file-input { pointer-events: none; }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; z-index: 8000; background: rgba(5,5,5,0.97); align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lb-img { max-width: 88vw; max-height: 86vh; object-fit: contain; border: 1px solid rgba(201,168,76,0.18); }
+  .lb-close { position: absolute; top: 1.8rem; right: 2.2rem; background: none; border: 1px solid rgba(201,168,76,0.4); color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; padding: 0.5rem 1.3rem; cursor: pointer; transition: all 0.2s; }
+  .lb-close:hover { background: var(--gold); color: var(--black); }
+  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 1.6rem; padding: 0.9rem 1.1rem; cursor: pointer; transition: all 0.2s; }
+  .lb-nav:hover { background: var(--gold); color: var(--black); }
+  .lb-prev { left: 1.2rem; }
+  .lb-next { right: 1.2rem; }
+  .lb-counter { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; color: rgba(201,168,76,0.5); }
+
+  /* PAGE TRANSITION */
+  .pt { position: fixed; inset: 0; background: var(--black); z-index: 7000; pointer-events: none; opacity: 0; transition: opacity 0.28s; }
+  .pt.on { opacity: 1; }
+
+  /* ANIMATE */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
+  .reveal { opacity: 0; transform: translateY(38px); transition: opacity 0.75s ease, transform 0.75s ease; }
+  .reveal.vis { opacity: 1; transform: none; }
+
+  /* MOBILE */
+  @media(max-width:900px){
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, .project-hero { padding: 7rem 1.5rem 3rem; }
+    .hero-stats { position: static; margin-top: 3rem; flex-direction: row; gap: 2rem; }
+    .stat-item { text-align: left; }
+    .services,.process,.why,.portfolio,.pricing,.testimonials,.cta-section { padding: 5rem 1.5rem; }
+    .gallery-section { padding: 3rem 1.5rem 5rem; }
+    .section-header { grid-template-columns: 1fr; gap: 1rem; }
+    .services-grid,.pricing-grid,.testimonials-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .process-steps::before { display: none; }
+    .why { grid-template-columns: 1fr; gap: 4rem; }
+    .why-visual { max-width: 280px; margin: auto; }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3,130px); }
+    .portfolio-item:nth-child(n) { grid-column: auto; grid-row: auto; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media(max-width:480px){
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+<div class="pt" id="pt"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lb">
+  <button class="lb-close" id="lbClose">✕ CLOSE</button>
+  <button class="lb-nav lb-prev" id="lbPrev">&#8592;</button>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <button class="lb-nav lb-next" id="lbNext">&#8594;</button>
+  <div class="lb-counter" id="lbCount"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" onclick="goHome()">ELITE <span>GRAPHICS</span></a>
+  <ul class="nav-links">
+    <li><a onclick="navTo('services')">Services</a></li>
+    <li><a onclick="navTo('process')">Process</a></li>
+    <li><a onclick="navTo('portfolio')">Work</a></li>
+    <li><a onclick="navTo('pricing')">Pricing</a></li>
+  </ul>
+  <a class="nav-cta" onclick="navTo('contact')">Get a Quote</a>
+</nav>
+
+<!-- ============ HOME PAGE ============ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div><div class="hero-bg-lines"></div>
+    <p class="hero-eyebrow">Visual Identity Architects</p>
+    <h1 class="hero-title"><span class="line-gold">DESIGN</span><span>THAT</span><span class="line-outline">DOMINATES</span></h1>
+    <p class="hero-desc">We don't just make things look good — we engineer visual identities that command attention, build authority, and convert strangers into loyal customers.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="navTo('contact')"><span>Start Your Project</span></button>
+      <button class="btn-ghost" onclick="navTo('portfolio')"><span class="arrow"></span>View Our Work</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-number">500+</div><div class="stat-label">Brands Built</div></div>
+      <div class="stat-item"><div class="stat-number">98%</div><div class="stat-label">Client Satisfaction</div></div>
+      <div class="stat-item"><div class="stat-number">7+</div><div class="stat-label">Years Elite</div></div>
+    </div>
+  </section>
+
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-item">LOGO DESIGN <span class="marquee-dot"></span></div>
+      <div class="marquee-item">BRAND IDENTITY <span class="marquee-dot"></span></div>
+      <div class="marquee-item">POSTER DESIGN <span class="marquee-dot"></span></div>
+      <div class="marquee-item">MENU DESIGN <span class="marquee-dot"></span></div>
+      <div class="marquee-item">SOCIAL MEDIA <span class="marquee-dot"></span></div>
+      <div class="marquee-item">PACKAGING <span class="marquee-dot"></span></div>
+      <div class="marquee-item">PRINT MEDIA <span class="marquee-dot"></span></div>
+      <div class="marquee-item">BUSINESS CARDS <span class="marquee-dot"></span></div>
+      <div class="marquee-item">LOGO DESIGN <span class="marquee-dot"></span></div>
+      <div class="marquee-item">BRAND IDENTITY <span class="marquee-dot"></span></div>
+      <div class="marquee-item">POSTER DESIGN <span class="marquee-dot"></span></div>
+      <div class="marquee-item">MENU DESIGN <span class="marquee-dot"></span></div>
+      <div class="marquee-item">SOCIAL MEDIA <span class="marquee-dot"></span></div>
+      <div class="marquee-item">PACKAGING <span class="marquee-dot"></span></div>
+      <div class="marquee-item">PRINT MEDIA <span class="marquee-dot"></span></div>
+      <div class="marquee-item">BUSINESS CARDS <span class="marquee-dot"></span></div>
+    </div>
+  </div>
+
+  <section class="services" id="services">
+    <div class="section-header reveal">
+      <div><p class="section-tag">What We Do</p><h2 class="section-title">SERVICES<br>WE OFFER</h2></div>
+      <p class="section-desc">Every pixel is intentional. Every design decision backed by strategy. Visuals that don't just look elite — they perform elite.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal"><span class="service-number">01</span><div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><h3 class="service-name">LOGO DESIGN</h3><p class="service-desc">Timeless, scalable logos that make an instant impression and stand the test of time.</p><ul class="service-features"><li>Primary & variation logos</li><li>Vector source files</li><li>Brand guidelines doc</li><li>Unlimited revisions</li></ul></div>
+      <div class="service-card reveal"><span class="service-number">02</span><div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><h3 class="service-name">BRAND IDENTITY</h3><p class="service-desc">Complete visual systems built from the ground up — color, typography, imagery, collateral.</p><ul class="service-features"><li>Complete brand system</li><li>Color & type hierarchy</li><li>Brand book / manual</li><li>Stationery suite</li></ul></div>
+      <div class="service-card reveal"><span class="service-number">03</span><div class="service-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3 class="service-name">POSTER DESIGN</h3><p class="service-desc">High-impact print and digital posters that stop scrollers dead in their tracks.</p><ul class="service-features"><li>Print-ready files (300dpi)</li><li>Social media formats</li><li>Digital display versions</li><li>Series cohesion</li></ul></div>
+      <div class="service-card reveal"><span class="service-number">04</span><div class="service-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><h3 class="service-name">MENU DESIGN</h3><p class="service-desc">Menus that boost average order value. Layouts that guide the customer's eye and appetite.</p><ul class="service-features"><li>Dine-in & takeaway menus</li><li>Digital menu boards</li><li>QR code menus</li><li>Seasonal update packages</li></ul></div>
+      <div class="service-card reveal"><span class="service-number">05</span><div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><h3 class="service-name">SOCIAL MEDIA KIT</h3><p class="service-desc">Scroll-stopping content templates for Instagram, Facebook, TikTok, and more.</p><ul class="service-features"><li>Post & story templates</li><li>Highlight icon sets</li><li>Animated versions</li><li>Editable Canva files</li></ul></div>
+      <div class="service-card reveal"><span class="service-number">06</span><div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><h3 class="service-name">PRINT & PACKAGING</h3><p class="service-desc">Business cards, flyers, tarpaulin, packaging, brochures — everything your brand touches.</p><ul class="service-features"><li>Business cards & stationery</li><li>Tarpaulin & banners</li><li>Product packaging</li><li>Brochures & flyers</li></ul></div>
+    </div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="section-header reveal"><div><p class="section-tag">How We Work</p><h2 class="section-title">OUR<br>PROCESS</h2></div><p class="section-desc">A proven 4-step creative process that delivers exceptional results every single time.</p></div>
+    <div class="process-steps">
+      <div class="process-step reveal"><div class="step-number-wrap"><span class="step-number">01</span></div><h3 class="step-title">DISCOVERY</h3><p class="step-desc">We dive deep into your brand, audience, competitors, and goals to build a winning strategy.</p></div>
+      <div class="process-step reveal"><div class="step-number-wrap"><span class="step-number">02</span></div><h3 class="step-title">CONCEPT</h3><p class="step-desc">Multiple distinct concepts crafted — each a different creative direction, all aligned to your strategy.</p></div>
+      <div class="process-step reveal"><div class="step-number-wrap"><span class="step-number">03</span></div><h3 class="step-title">REFINE</h3><p class="step-desc">Collaborative revision rounds until every element is exactly right. Your vision, perfected.</p></div>
+      <div class="process-step reveal"><div class="step-number-wrap"><span class="step-number">04</span></div><h3 class="step-title">DELIVER</h3><p class="step-desc">All final files organized and delivered in every format you'll ever need. Ready to launch.</p></div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="why-visual reveal"><div class="why-ring ring-1"></div><div class="why-ring ring-2"></div><div class="why-ring ring-3"></div><div class="why-orbits"><div class="why-orbit-dot dot-top"></div><div class="why-orbit-dot dot-right"></div></div><div class="why-center-box"><div class="why-center-text">ELITE</div><div class="why-center-label">Quality<br>Guaranteed</div></div></div>
+    <div class="why-points">
+      <div class="section-tag reveal">Why Choose Us</div>
+      <h2 class="section-title reveal" style="margin-bottom:2.5rem">WHY<br>ELITE?</h2>
+      <div class="why-point reveal"><div class="point-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="point-title">Only Elite-Level Work</div><p class="point-desc">We hold every project to a relentlessly high standard. If it doesn't look elite, it doesn't go out.</p></div></div>
+      <div class="why-point reveal"><div class="point-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="point-title">Fast Turnaround</div><p class="point-desc">Most projects delivered within 2–5 business days. Rush delivery available.</p></div></div>
+      <div class="why-point reveal"><div class="point-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="point-title">Dedicated Creative Team</div><p class="point-desc">A senior designer assigned to your project — not a template mill. Real craft.</p></div></div>
+      <div class="why-point reveal"><div class="point-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div><div class="point-title">Results-Driven Design</div><p class="point-desc">Every choice made to attract your target customer and grow your business.</p></div></div>
+    </div>
+  </section>
+
+  <section class="portfolio" id="portfolio">
+    <div class="section-header reveal"><div><p class="section-tag">Selected Work</p><h2 class="section-title">OUR<br>PORTFOLIO</h2></div><p class="section-desc">Click any category to browse our full project gallery and upload your work.</p></div>
+    <div class="portfolio-grid reveal">
+      <div class="portfolio-item" onclick="openProject('brand-identity')">
+        <div class="portfolio-bg pb-1">BRAND IDENTITY</div>
+        <div class="portfolio-overlay"><div class="portfolio-overlay-title">BRAND IDENTITY</div><div class="portfolio-overlay-tag">Visual Systems · Guidelines</div><button class="portfolio-view-btn">VIEW PROJECTS ›</button></div>
+      </div>
+      <div class="portfolio-item" onclick="openProject('logo-design')">
+        <div class="portfolio-bg pb-2" style="flex-direction:column;gap:8px;font-size:1.25rem;"><div style="width:42px;height:42px;border:1px solid rgba(201,168,76,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;">⬡</div>LOGO</div>
+        <div class="portfolio-overlay"><div class="portfolio-overlay-title">LOGO DESIGN</div><div class="portfolio-overlay-tag">Marks · Wordmarks · Icons</div><button class="portfolio-view-btn">VIEW PROJECTS ›</button></div>
+      </div>
+      <div class="portfolio-item" onclick="openProject('event-poster')">
+        <div class="portfolio-bg pb-3" style="font-size:1.5rem;">EVENT POSTER</div>
+        <div class="portfolio-overlay"><div class="portfolio-overlay-title">EVENT POSTER</div><div class="portfolio-overlay-tag">Print · Digital · Series</div><button class="portfolio-view-btn">VIEW PROJECTS ›</button></div>
+      </div>
+      <div class="portfolio-item" onclick="openProject('packaging')">
+        <div class="portfolio-bg pb-4" style="font-size:1.1rem;">PACKAGING</div>
+        <div class="portfolio-overlay"><div class="portfolio-overlay-title">PACKAGING</div><div class="portfolio-overlay-tag">Product · Box · Label</div><button class="portfolio-view-btn">VIEW PROJECTS ›</button></div>
+      </div>
+      <div class="portfolio-item" onclick="openProject('full-brand')">
+        <div class="portfolio-bg pb-5" style="font-size:1.8rem;">FULL BRAND</div>
+        <div class="portfolio-overlay"><div class="portfolio-overlay-title">FULL BRAND</div><div class="portfolio-overlay-tag">Complete Identity Systems</div><button class="portfolio-view-btn">VIEW PROJECTS ›</button></div>
+      </div>
+      <div class="portfolio-item" onclick="openProject('menu-design')">
+        <div class="portfolio-bg pb-6" style="font-size:1.3rem;">MENU DESIGN</div>
+        <div class="portfolio-overlay"><div class="portfolio-overlay-title">MENU DESIGN</div><div class="portfolio-overlay-tag">Restaurant · Café · Bar</div><button class="portfolio-view-btn">VIEW PROJECTS ›</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="section-header reveal"><div><p class="section-tag">Investment</p><h2 class="section-title">SIMPLE<br>PRICING</h2></div><p class="section-desc">Transparent, no-hidden-fees pricing. Pick the package that fits your needs.</p></div>
+    <div class="pricing-grid reveal">
+      <div class="pricing-card"><div class="pricing-tier">Starter</div><div class="pricing-price"><span>₱</span>1,999</div><div class="pricing-period">Per Project</div><div class="pricing-divider"></div><ul class="pricing-features"><li class="yes">Logo design (2 concepts)</li><li class="yes">2 revision rounds</li><li class="yes">PNG & JPG delivery</li><li class="yes">5-day turnaround</li><li class="no">Vector / AI files</li><li class="no">Brand guidelines</li><li class="no">Social media kit</li></ul><button class="btn-pricing btn-pricing-outline" onclick="navTo('contact')">Get Started</button></div>
+      <div class="pricing-card featured"><div class="pricing-tier">Professional</div><div class="pricing-price"><span>₱</span>4,999</div><div class="pricing-period">Per Project</div><div class="pricing-divider"></div><ul class="pricing-features"><li class="yes">Logo design (4 concepts)</li><li class="yes">Unlimited revisions</li><li class="yes">All file formats (AI, EPS, PDF)</li><li class="yes">Brand color & typography guide</li><li class="yes">Business card design</li><li class="yes">3-day turnaround</li><li class="no">Full brand identity system</li></ul><button class="btn-pricing btn-pricing-gold" onclick="navTo('contact')">Choose This Plan</button></div>
+      <div class="pricing-card"><div class="pricing-tier">Elite</div><div class="pricing-price"><span>₱</span>9,999</div><div class="pricing-period">Full Brand Package</div><div class="pricing-divider"></div><ul class="pricing-features"><li class="yes">Full brand identity system</li><li class="yes">Logo + variations</li><li class="yes">Complete brand manual</li><li class="yes">Stationery suite (5 items)</li><li class="yes">Social media template kit</li><li class="yes">Menu or poster design included</li><li class="yes">Priority support</li></ul><button class="btn-pricing btn-pricing-outline" onclick="navTo('contact')">Go Elite</button></div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="section-header reveal"><div><p class="section-tag">Client Voices</p><h2 class="section-title">WHAT THEY<br>SAY</h2></div><p class="section-desc">We let the work — and the words of those we've served — speak for themselves.</p></div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-quote">Elite Graphics completely transformed how our café looks. The menu and brand identity they created tripled our social media followers in two months.</p><div class="testimonial-author">Maria Santos</div><div class="testimonial-role">Owner · Brew & Bliss Café</div></div>
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-quote">Nobody delivers at this level. The logo they created for my clothing brand is iconic. People constantly ask who designed it.</p><div class="testimonial-author">Jericho Reyes</div><div class="testimonial-role">Founder · Stature Apparel</div></div>
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-quote">Our event poster sold out the venue 3 weeks early. We only work with Elite Graphics now. No question.</p><div class="testimonial-author">Diane Lim</div><div class="testimonial-role">Events Director · Apex Events Co.</div></div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="contact">
+    <p class="cta-tag reveal">Ready to Elevate?</p>
+    <h2 class="cta-title reveal">LET'S BUILD<br><span style="color:var(--gold)">SOMETHING</span><br>ELITE</h2>
+    <p class="cta-sub reveal">Your brand deserves to look as good as it truly is. Let's create something unforgettable.</p>
+    <div class="cta-actions reveal">
+      <a href="mailto:hello@elitegraphics.com" class="btn-large btn-large-gold">Start a Project</a>
+      <a href="#" class="btn-large btn-large-outline">Message Us</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand">ELITE GRAPHICS</div><p class="footer-tagline">Crafting visual identities that command attention, build authority, and drive real results for businesses that refuse to be ordinary.</p><div class="footer-social"><a href="#" class="social-btn">fb</a><a href="#" class="social-btn">ig</a><a href="#" class="social-btn">be</a><a href="#" class="social-btn">wa</a></div></div>
+      <div><div class="footer-col-title">Services</div><ul class="footer-links"><li><a onclick="openProject('logo-design')">Logo Design</a></li><li><a onclick="openProject('brand-identity')">Brand Identity</a></li><li><a onclick="openProject('event-poster')">Poster Design</a></li><li><a onclick="openProject('menu-design')">Menu Design</a></li><li><a>Social Media Kit</a></li><li><a onclick="openProject('packaging')">Packaging</a></li></ul></div>
+      <div><div class="footer-col-title">Company</div><ul class="footer-links"><li><a>About Us</a></li><li><a onclick="navTo('process')">Our Process</a></li><li><a onclick="navTo('portfolio')">Portfolio</a></li><li><a onclick="navTo('pricing')">Pricing</a></li></ul></div>
+      <div><div class="footer-col-title">Contact</div><ul class="footer-links"><li><a href="mailto:hello@elitegraphics.com">hello@elitegraphics.com</a></li><li><a>+63 912 345 6789</a></li><li><a>Olongapo City, PH</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div class="footer-copy">© 2025 <span>Elite Graphics</span>. All rights reserved.</div><div class="footer-copy">Designed with <span>♦</span> by Elite Graphics</div></div>
+  </footer>
+</div>
+
+<!-- ============ PROJECT PAGE ============ -->
+<div class="page" id="page-project">
+  <section class="project-hero">
+    <div class="project-hero-bg"></div>
+    <div class="project-hero-lines"></div>
+    <button class="btn-back" onclick="goHome()">
+      <div class="btn-back-icon"><div class="arr"></div></div>
+      <span>Back to Portfolio</span>
+    </button>
+    <p class="proj-tag" id="projTag">Category</p>
+    <h1 class="proj-title" id="projTitle">PROJECT</h1>
+    <p class="proj-desc" id="projDesc">Description.</p>
+  </section>
+  <section class="gallery-section">
+    <p class="gallery-hint">Click any slot to upload your project image — auto-sizes to your image dimensions</p>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+</div>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur'), curRing = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curRing.style.left=rx+'px';curRing.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.addEventListener('mouseover',e=>{
+  if(e.target.matches('a,button,.portfolio-item,.upload-slot')){cur.style.transform='translate(-50%,-50%) scale(2.5)';curRing.style.opacity='0';}
+  else{cur.style.transform='translate(-50%,-50%) scale(1)';curRing.style.opacity='0.6';}
+});
+
+// ── PROJECT DATA ──
+const PROJECTS = {
+  'brand-identity': { tag:'Visual Identity Systems', title:'BRAND <span class="gold">IDENTITY</span>', desc:'Complete brand identity projects — color systems, typography, brand manuals, and full collateral suites.' },
+  'logo-design':    { tag:'Marks · Wordmarks · Icons', title:'LOGO <span class="gold">DESIGN</span>', desc:'Timeless logo marks crafted for businesses across every industry. Every mark tells a story.' },
+  'event-poster':   { tag:'Print · Digital · Series', title:'EVENT <span class="gold">POSTER</span>', desc:'High-impact event posters and promotional graphics that command attention and drive footfall.' },
+  'packaging':      { tag:'Product · Box · Label', title:'PACKAGING <span class="gold">DESIGN</span>', desc:'Product packaging that stands out on shelves and reinforces premium brand perception.' },
+  'full-brand':     { tag:'Complete Identity Systems', title:'FULL <span class="gold">BRAND</span>', desc:'End-to-end brand builds — logo, identity, collateral, digital assets, and everything in between.' },
+  'menu-design':    { tag:'Restaurant · Café · Bar', title:'MENU <span class="gold">DESIGN</span>', desc:'Beautiful, strategic menu designs that enhance dining experiences and elevate perceived value.' }
+};
+
+// In-memory image storage (20 slots per category)
+const IMGS = {};
+Object.keys(PROJECTS).forEach(k => { IMGS[k] = new Array(20).fill(null); });
+
+// ── LIGHTBOX ──
+let lbImgs=[], lbIdx=0;
+const lb=document.getElementById('lb'), lbImg=document.getElementById('lbImg'), lbCount=document.getElementById('lbCount');
+document.getElementById('lbClose').onclick=()=>lb.classList.remove('open');
+document.getElementById('lbPrev').onclick=()=>{lbIdx=(lbIdx-1+lbImgs.length)%lbImgs.length;lbImg.src=lbImgs[lbIdx];lbCount.textContent=(lbIdx+1)+' / '+lbImgs.length;};
+document.getElementById('lbNext').onclick=()=>{lbIdx=(lbIdx+1)%lbImgs.length;lbImg.src=lbImgs[lbIdx];lbCount.textContent=(lbIdx+1)+' / '+lbImgs.length;};
+lb.addEventListener('click',e=>{if(e.target===lb)lb.classList.remove('open');});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')lb.classList.remove('open');if(e.key==='ArrowLeft')document.getElementById('lbPrev').click();if(e.key==='ArrowRight')document.getElementById('lbNext').click();});
+function openLB(cat, idx){
+  lbImgs=IMGS[cat].filter(Boolean);
+  if(!lbImgs.length)return;
+  const src=IMGS[cat][idx];
+  lbIdx=lbImgs.indexOf(src); if(lbIdx<0)lbIdx=0;
+  lbImg.src=lbImgs[lbIdx]; lbCount.textContent=(lbIdx+1)+' / '+lbImgs.length;
+  lb.classList.add('open');
+}
+
+// ── BUILD GALLERY ──
+let curCat = null;
+function buildGallery(cat){
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML='';
+  for(let i=0;i<20;i++){
+    const slot = document.createElement('div');
+    const hasSrc = !!IMGS[cat][i];
+    slot.className='upload-slot'+(hasSrc?' filled':'');
+    slot.dataset.i=i; slot.dataset.cat=cat;
+
+    if(hasSrc){
+      slot.innerHTML=`
+        <span class="slot-num">${String(i+1).padStart(2,'0')}</span>
+        <div class="slot-img-wrap"><img src="${IMGS[cat][i]}" alt="Work ${i+1}"></div>
+        <div class="slot-hover-overlay">
+          <div class="overlay-view">VIEW FULLSCREEN</div>
+          <button class="overlay-remove">✕ REMOVE IMAGE</button>
+        </div>`;
+      // view on click (not remove)
+      slot.addEventListener('click', function(e){
+        if(e.target.classList.contains('overlay-remove'))return;
+        openLB(cat,i);
+      });
+      slot.querySelector('.overlay-remove').addEventListener('click',function(e){
+        e.stopPropagation(); IMGS[cat][i]=null; buildGallery(cat);
+      });
+    } else {
+      slot.innerHTML=`
+        <span class="slot-num">${String(i+1).padStart(2,'0')}</span>
+        <div class="slot-empty">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div class="slot-empty-text">CLICK TO UPLOAD<br>YOUR WORK</div>
+        </div>
+        <input type="file" accept="image/*" class="slot-file-input">`;
+      slot.querySelector('.slot-file-input').addEventListener('change',function(e){
+        const f=e.target.files[0]; if(!f)return;
+        const r=new FileReader();
+        r.onload=ev=>{IMGS[cat][i]=ev.target.result;buildGallery(cat);};
+        r.readAsDataURL(f);
+      });
+    }
+    grid.appendChild(slot);
+  }
+}
+
+// ── NAVIGATION ──
+const pt=document.getElementById('pt');
+function showPage(id,cb){
+  pt.classList.add('on');
+  setTimeout(()=>{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+    pt.classList.remove('on');
+    if(cb)cb();
+    initReveal();
+  },280);
+}
+function openProject(cat){
+  curCat=cat;
+  const d=PROJECTS[cat];
+  document.getElementById('projTag').textContent=d.tag;
+  document.getElementById('projTitle').innerHTML=d.title;
+  document.getElementById('projDesc').textContent=d.desc;
+  buildGallery(cat);
+  showPage('page-project');
+}
+function goHome(){ showPage('page-home'); }
+function navTo(id){
+  if(!document.getElementById('page-home').classList.contains('active')){
+    showPage('page-home',()=>{setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});},200);});
+  } else {
+    const el=document.getElementById(id); if(el)el.scrollIntoView({behavior:'smooth'});
+  }
+}
+
+// ── SCROLL REVEAL ──
+function initReveal(){
+  const els=document.querySelectorAll('.page.active .reveal:not(.vis)');
+  const ob=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),60);ob.unobserve(e.target);}});
+  },{threshold:0.1});
+  els.forEach((el,i)=>{el.style.transitionDelay=(i*0.07)+'s';ob.observe(el);});
+}
+initReveal();
+document.querySelectorAll('.services-grid,.pricing-grid,.testimonials-grid').forEach(g=>{
+  g.querySelectorAll('.reveal').forEach((c,i)=>{c.style.transitionDelay=(i*0.09)+'s';});
+});
+</script>
+</body>
+</html>
