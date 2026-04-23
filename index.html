@@ -17,8 +17,8 @@ body{background:var(--black);color:var(--white);font-family:'Cormorant Garamond'
 .cursor-ring{width:38px;height:38px;border:1px solid var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.6}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:.4}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.6rem 4rem;background:linear-gradient(to bottom,rgba(8,8,8,.97),transparent);backdrop-filter:blur(2px)}
+/* NAV — fixed: removed backdrop-filter blur, tightened gradient so it doesn't bleed down */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.6rem 4rem;background:linear-gradient(to bottom,rgba(8,8,8,.98) 0%,rgba(8,8,8,.85) 60%,transparent 100%);height:80px;}
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.2em;color:var(--gold);cursor:pointer;text-decoration:none}
 .nav-logo span{color:var(--white)}
 .nav-links{display:flex;gap:2.5rem;list-style:none}
@@ -208,7 +208,8 @@ footer{background:var(--gray);padding:4rem 4rem 2rem;border-top:1px solid rgba(2
 .footer-copy span{color:var(--gold)}
 
 /* ============ PROJECT PAGE ============ */
-.project-hero{min-height:52vh;display:flex;flex-direction:column;justify-content:flex-end;padding:8rem 4rem 4rem;position:relative;overflow:hidden}
+/* Project hero — padding-top increased to push content below the fixed nav (80px height) */
+.project-hero{min-height:52vh;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 4rem 4rem;position:relative;overflow:hidden}
 .project-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(201,168,76,.1) 0%,transparent 65%),var(--black)}
 .project-hero-lines{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .project-hero-lines::before{content:'';position:absolute;top:-30%;right:-10%;width:600px;height:600px;border:1px solid rgba(201,168,76,.07);border-radius:50%;animation:rotate 35s linear infinite}
@@ -294,7 +295,7 @@ footer{background:var(--gray);padding:4rem 4rem 2rem;border-top:1px solid rgba(2
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" onclick="goHome()" style="display:flex;align-items:center;padding:0;background:none;line-height:0;"><img src="https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/2%20rbg.png" alt="Elite Graphics" style="height:120px;width:220px;display:block;object-fit:contain;mix-blend-mode:screen;"></a>
+  <a class="nav-logo" onclick="goHome()" style="display:flex;align-items:center;padding:0;background:none;line-height:0;"><img src="https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/2%20rbg.png" alt="Elite Graphics" style="height:70px;width:90px;display:block;object-fit:contain;mix-blend-mode:screen;"></a>
   <ul class="nav-links">
     <li><a onclick="navTo('services')">Services</a></li>
     <li><a onclick="navTo('process')">Process</a></li>
@@ -470,8 +471,7 @@ const PORTFOLIO = {
       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/51.png',
       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/31.png',
       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/32.png',
-          'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/J%26S%20APPAREL%20Brand%20Board.png',
- 'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/J%26S%20APPAREL%20Brand%20Board.png',
+           'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/J%26S%20APPAREL%20Brand%20Board.png'
     ]
   },
 
@@ -480,7 +480,19 @@ const PORTFOLIO = {
     title:'LOGO <span class="gold">DESIGN</span>',
     desc:'Timeless logo marks crafted for businesses across every industry. Every mark tells a powerful story.',
     images:[
-      'https://images.unsplash.com/photo-1600804340584-c7db2eacf0bf?w=800&q=80'
+      'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/6.png',
+ 'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/16.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/17.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/18.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/19.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/20.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/21.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/22.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/23.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/24.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/49.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/J&S LOGO COLORED.png',
+       'https://raw.githubusercontent.com/samuel201311/ELITE-GRAPHICS/main/images/J&S LOGO B&W.png'
     ]
   },
 
